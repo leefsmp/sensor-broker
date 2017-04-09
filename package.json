@@ -1,0 +1,22 @@
+{
+  "name": "sensor-broker",
+  "version": "1.0.0",
+  "description": "sensor broker local server",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node bin/start.js"
+  },
+  "author": "Philippe Leefsma <philippe.leefsma@gmail.com> (tps://twitter.com/F3lipek)",
+  "license": "MIT",
+  "dependencies": {
+    "babel-core": "^6.24.0",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-es2015-node5": "^1.2.0",
+    "babel-preset-stage-0": "^6.22.0",
+    "c0nfig": "^0.2.2",
+    "cross-env": "^3.2.4",
+    "express": "^4.15.2",
+    "sensortag": "1.2.0",
+    "socket.io-client": "^1.7.3"
+  }
+}
