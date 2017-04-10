@@ -14,8 +14,17 @@ const config = {
     port: 443
   },
   sensor: {
-    temperature:{
-      threshold: 22
+    acceleration: {
+      threshold: 0.5,
+      value: 0
+    },
+    temperature: {
+      threshold: 22,
+      value: 0
+    },
+    lux: {
+      threshold: 100,
+      value: 0
     }
   }
 }

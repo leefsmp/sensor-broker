@@ -43,6 +43,8 @@ const onSensorDiscovered = (sensor, socketSvc) => {
       return
     }
 
+    // CC2650 only
+    sensor.readBatteryLevel &&
     sensor.readBatteryLevel((error, batteryLevel) => {
 
       console.log('  Battery Level: ' + batteryLevel)
@@ -69,6 +71,15 @@ const onSensorDiscovered = (sensor, socketSvc) => {
       console.log(' ---------------------------------------------')
     })
 
+    // Initialize sensor
+    sensor.enableIrTemperature()
+    sensor.enableAccelerometer()
+    sensor.enableLuxometer()
+
+    sensor.setIrTemperaturePeriod(1000)
+    sensor.setAccelerometerPeriod(1000)
+    sensor.setLuxometerPeriod(1000)
+
     var data = {
       acceleration: config.sensor.acceleration,
       temperature: config.sensor.temperature,
@@ -76,9 +87,20 @@ const onSensorDiscovered = (sensor, socketSvc) => {
       sensorId: sensor.id
     }
 
-    sensor.enableIrTemperature()
+    // Initialize data
+    sensor.readIrTemperature((error, objectTemperature) => {
+      data.temperature.value = objectTemperature
+    })
 
-    sensor.setIrTemperaturePeriod(1000)
+    sensor.readAccelerometer((error, x, y, z) => {
+      data.acceleration.value = norm({
+        x, y, z
+      })
+    })
+
+    sensor.readLuxometer((error, lux) => {
+      data.lux.value = lux
+    })
 
     sensor.notifyIrTemperature ()
 
@@ -98,15 +120,11 @@ const onSensorDiscovered = (sensor, socketSvc) => {
     })
 
 
-    sensor.enableAccelerometer()
-
-    sensor.setAccelerometerPeriod(1000)
-
     sensor.notifyAccelerometer()
 
     sensor.on('accelerometerChange', (x, y, z) => {
 
-      const acceleration = squaredNorm({
+      const acceleration = norm({
         x, y, z
       })
 
@@ -122,10 +140,6 @@ const onSensorDiscovered = (sensor, socketSvc) => {
       }
     })
 
-
-    sensor.enableLuxometer()
-
-    sensor.setLuxometerPeriod(1000)
 
     sensor.notifyLuxometer()
 
@@ -149,9 +163,9 @@ const onSensorDiscovered = (sensor, socketSvc) => {
 //
 //
 /////////////////////////////////////////////////////////////////////
-const squaredNorm = (v) => {
+const norm = (v) => {
 
-  return v.x * v.x + v.y * v.y + v.z * v.z
+  return Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z)
 }
 
 /////////////////////////////////////////////////////////////////////

@@ -16,7 +16,7 @@ const config = {
       value: 0
     },
     temperature: {
-      threshold: 26,
+      threshold: 30,
       value: 0
     },
     lux: {
